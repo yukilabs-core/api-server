@@ -1,0 +1,251 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Portfolio API - Project ①②③④⑤",
+    "version": "1.0.0",
+    "description": "統一 API 基盤"
+  },
+  "servers": [
+    {
+      "url": "https://api-render.onrender.com",
+      "description": "本番環境"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "開発環境"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "current_status_id": { "type": "integer" },
+          "assigned_to": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "closed_at": { "type": "string", "format": "date-time", "nullable": true }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "enum": [false] },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/tasks": {
+      "get": {
+        "summary": "タスク一覧取得",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 50 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": { "type": "integer", "default": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功"
+          }
+        }
+      },
+      "post": {
+        "summary": "タスク作成",
+        "tags": ["Tasks"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "assigned_to": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "作成成功"
+          },
+          "401": {
+            "description": "認証失敗"
+          }
+        }
+      }
+    },
+    "/api/tasks/{task_id}": {
+      "get": {
+        "summary": "タスク詳細取得",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功"
+          },
+          "404": {
+            "description": "見つかりません"
+          }
+        }
+      }
+    },
+    "/api/tasks/{task_id}/status": {
+      "patch": {
+        "summary": "タスクステータス更新",
+        "tags": ["Tasks"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["status_id"],
+                "properties": {
+                  "status_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功"
+          },
+          "401": {
+            "description": "認証失敗"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "ログイン",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ログイン成功"
+          },
+          "401": {
+            "description": "認証失敗"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "summary": "トークンリフレッシュ",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["refresh_token"],
+                "properties": {
+                  "refresh_token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "リフレッシュ成功"
+          },
+          "401": {
+            "description": "無効なトークン"
+          }
+        }
+      }
+    },
+    "/api/dashboard/stats": {
+      "get": {
+        "summary": "ダッシュボード統計取得",
+        "tags": ["Dashboard"],
+        "responses": {
+          "200": {
+            "description": "成功"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "ヘルスチェック",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "サーバー正常"
+          }
+        }
+      }
+    }
+  }
+}
