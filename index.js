@@ -23,7 +23,8 @@ app.use(cors({
     'http://localhost:3000',
     'http://localhost:4321',
     'https://portfolio.pages.dev',
-    'https://yukilabs-core.pages.dev'
+    'https://yukilabs-core.pages.dev',
+    'https://dainty-toffee-00e8a2.netlify.app'
   ],
   credentials: true
 }));
