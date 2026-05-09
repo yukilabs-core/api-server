@@ -9,7 +9,7 @@ class DashboardService {
   async getStats() {
     const { data: tasks, count } = await supabase
       .from('tasks')
-      .select('*', { count: 'exact' })
+      .select('*, task_statuses(id, is_terminal)', { count: 'exact' })
       .eq('is_deleted', false);
 
     const completedTasks = tasks.filter(t => t.task_statuses?.is_terminal);
