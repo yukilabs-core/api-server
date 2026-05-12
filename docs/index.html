@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Server 設計・実装ガイド</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      font-size: 1.5em;
+      color: #667eea;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p {
+      color: #666;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin-bottom: 20px;
+    }
+
+    .card .link {
+      color: #667eea;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .card .link:hover {
+      text-decoration: underline;
+    }
+
+    .emoji {
+      font-size: 1.3em;
+    }
+
+    .info-box {
+      background: white;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .info-box h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .info-box p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      opacity: 0.8;
+      font-size: 0.9em;
+      margin-top: 60px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .stat .number {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat .label {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 API Server 設計・実装ガイド</h1>
+      <p>Express + RBAC + JWT の実装ベストプラクティス</p>
+    </header>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="number">6</div>
+        <div class="label">リポジトリ分析</div>
+      </div>
+      <div class="stat">
+        <div class="number">2</div>
+        <div class="label">設計ガイド</div>
+      </div>
+      <div class="stat">
+        <div class="number">∞</div>
+        <div class="label">学習価値</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h3>🎯 このガイドについて</h3>
+      <p>
+        API Server（Project②）の実装を通じて、Node.js での認証・認可・API設計のベストプラクティスを学びます。
+        Express、NestJS、GraphQL など、業界標準のリポジトリを分析し、
+        設計思想・実装パターンの違いを比較します。
+      </p>
+    </div>
+
+    <div class="grid">
+      <a href="design-comparison.html" class="card">
+        <h2><span class="emoji">🔀</span> 設計思想比較</h2>
+        <p>
+          Express vs Hono のアーキテクチャ、ミドルウェア設計、型安全性、
+          エラーハンドリングを深掘り。設計思想の根本的な違いを学びます。
+        </p>
+        <span class="link">詳しく見る →</span>
+      </a>
+
+      <a href="reference-repos-analysis.html" class="card">
+        <h2><span class="emoji">📖</span> リポジトリ分析</h2>
+        <p>
+          Passport.js、NestJS、Keystone、GraphQL など 6つの有名リポジトリを分析。
+          各フレームワークの認証・認可・API設計パターンを比較します。
+        </p>
+        <span class="link">詳しく見る →</span>
+      </a>
+
+      <div class="card">
+        <h2><span class="emoji">🚀</span> 実装ロードマップ</h2>
+        <p>
+          Phase A（短期）: RBAC + RS256
+          Phase B（中期）: Item 権限層
+          Phase C（長期）: GraphQL 導入
+        </p>
+        <span class="link">実装予定 →</span>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h3>📂 ファイル構成</h3>
+      <p>
+        <strong>api-server/docs/</strong><br>
+        ├ index.html ← 今ここ<br>
+        ├ design-comparison.html - Express vs Hono 設計比較<br>
+        └ reference-repos-analysis.html - 6リポジトリ詳細分析
+      </p>
+    </div>
+
+    <footer>
+      <p>📚 API Server Learning Guide | Created with 💜 for yukilabs-core</p>
+      <p>最終更新: 2026-05-12</p>
+    </footer>
+  </div>
+</body>
+</html>
