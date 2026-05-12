@@ -22,7 +22,7 @@ class AuthService {
       {
         user_id: user.id,
         email: user.email,
-        role: 'admin'
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
@@ -49,10 +49,20 @@ class AuthService {
     try {
       const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', decoded.user_id)
+        .single();
+
+      if (error || !user) {
+        throw new Error('User not found');
+      }
+
       const newAccessToken = jwt.sign(
         {
           user_id: decoded.user_id,
-          role: 'admin'
+          role: user.role
         },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }

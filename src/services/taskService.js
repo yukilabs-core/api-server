@@ -117,6 +117,16 @@ class TaskService {
 
     return { success: true };
   }
+
+  async deleteTask(taskId) {
+    const { error } = await supabase
+      .from('tasks')
+      .update({ is_deleted: true })
+      .eq('id', taskId);
+
+    if (error) throw error;
+    return { success: true };
+  }
 }
 
 export default new TaskService();

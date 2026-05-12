@@ -81,6 +81,15 @@ class TaskController {
       next(err);
     }
   }
+
+  async deleteTask(req, res, next) {
+    try {
+      await taskService.deleteTask(req.params.task_id);
+      res.json(APIResponse.success({ success: true }));
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new TaskController();
