@@ -8,11 +8,13 @@ import { dirname, join } from 'path';
 
 import requestLogger from './src/middleware/requestLogger.js';
 import errorHandler from './src/middleware/errorHandler.js';
+import { metricsMiddleware } from './src/middleware/metricsMiddleware.js';
 import APIResponse from './src/utils/response.js';
 
 import taskRoutes from './src/routes/tasks.js';
 import authRoutes from './src/routes/auth.js';
 import dashboardRoutes from './src/routes/dashboard.js';
+import monitoringRoutes from './src/routes/monitoring.js';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -30,10 +32,12 @@ app.use(cors({
 }));
 
 app.use(requestLogger);
+app.use(metricsMiddleware);
 
 app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/monitoring', monitoringRoutes);
 
 const swaggerDocument = JSON.parse(
   readFileSync(join(__dirname, 'swagger.json'), 'utf-8')
